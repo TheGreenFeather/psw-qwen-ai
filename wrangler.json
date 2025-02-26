@@ -1,5 +1,5 @@
 {
-  "name": "my-worker",
+  "name": "psw-qwen-ai",
   "main": "./index.js",
   "compatibility_date": "2024-02-26",
   "workers_dev": false,
