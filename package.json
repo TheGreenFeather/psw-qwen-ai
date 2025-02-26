@@ -1,0 +1,23 @@
+{
+  "name": "qwen-ai-asistant",
+  "version": "1.0.0",
+  "description": "Qwen AI Assistant",
+  "main": "server.js",
+  "type": "module",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "keywords": [
+    "qwen",
+    "ai",
+    "assistant"
+  ],
+  "author": "Nguyen Vuong",
+  "license": "ISC",
+  "dependencies": {
+    "@huggingface/transformers": "^3.3.3",
+    "body-parser": "^1.20.3",
+    "cors": "^2.8.5",
+    "express": "^4.21.2"
+  }
+}
