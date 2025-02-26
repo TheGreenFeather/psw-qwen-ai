@@ -2,10 +2,10 @@
   "name": "psw-qwen-ai",
   "main": "./index.js",
   "compatibility_date": "2024-02-26",
-  "compatibility_flags": {
-    "nodejs_compat": true,
-    "top_level_await": true
-  },
+  "compatibility_flags": [
+    "nodejs_compat",
+    "top_level_await"
+  ],
   "workers_dev": false,
   "route": {
     "pattern": "psw-qwen-ai.nguyenvuong17102008.workers.dev/*",
