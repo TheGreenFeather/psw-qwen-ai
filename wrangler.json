@@ -1,7 +1,7 @@
 {
-  "name": "node:psw-qwen-ai",
+  "name": "psw-qwen-ai",
   "main": "./index.js",
-  "compatibility_date": "2024-02-26",
+  "compatibility_date": "2025-02-27",
   "compatibility_flags": [
     "nodejs_compat",
     "top_level_await"
