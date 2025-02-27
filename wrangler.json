@@ -2,7 +2,7 @@
   "name": "psw-qwen-ai",
   "type": "webpack",
   "main": "index.js",
-  "account_id": "YOUR_ACCOUNT_ID",
+  "account_id": "deab1848c77408b182c391e586116d9f",
   "workers_dev": true,
   "compatibility_date": "2025-02-27",
   "node_compat": true,
