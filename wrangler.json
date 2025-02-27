@@ -1,0 +1,13 @@
+{
+  "name": "psw-qwen-ai",
+  "type": "webpack",
+  "main": "index.js",
+  "account_id": "YOUR_ACCOUNT_ID",
+  "workers_dev": true,
+  "compatibility_date": "2025-02-27",
+  "node_compat": true,
+  "route": {
+    "pattern": "psw-qwen-ai.nguyenvuong17102008.workers.dev/*",
+    "zone_name": "psw-qwen-ai.nguyenvuong17102008.workers.dev.org"
+  }
+}
