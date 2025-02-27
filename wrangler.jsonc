@@ -2,7 +2,9 @@
   "$schema": "node_modules/wrangler/config-schema.json",
   "name": "psw-qwen-ai",
   "main": "src/index.ts",
-  "compatibility_date": "2025-02-27"
+  "compatibility_date": "2025-02-27",
+  "type": "webpack",
+  "webpack_config": "webpack.config.js"
   // "compatibility_flags": [
   //   "nodejs_compat"
   // ],

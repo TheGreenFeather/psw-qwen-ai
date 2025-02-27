@@ -9,7 +9,6 @@ const model_name = "onnx-community/Qwen2.5-1.5B-Instruct";
 console.log(`Loading model: ${model_name}`);
 
 const Qwen = await pipeline("text-generation", model_name, {
-  // device: "cpu",
   dtype: "q4",
 });
 
