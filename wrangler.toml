@@ -3,6 +3,7 @@ type = "javascript"
 
 account_id = "deab1848c77408b182c391e586116d9f"
 compatibility_date = "2025-02-28"
+node_compat = true
 workers_dev = true
 # Uncomment and set these if you are deploying to a custom domain.
 # route = "https://your-custom-domain.com/*"
