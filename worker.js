@@ -83,8 +83,6 @@ async function handleRequest(request) {
   return new Response("Invalid request message", { status: 400 });
 }
 
-main().catch(console.error);
-
 //  The code above is a Cloudflare Worker script that runs the ONNX model on the browser. It uses the  onnxruntime-web  library to load the model and run inference. The script also loads the tokenizer and uses it to tokenize and detokenize text. 
 //  The script listens for incoming requests and expects a POST request with a JSON body containing a  message  field. It then generates text based on the given message and returns the generated text in the response. 
 //  3. Deploy the Worker 
