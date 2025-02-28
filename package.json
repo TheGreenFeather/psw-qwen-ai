@@ -4,8 +4,8 @@
   "description": "A Cloudflare Worker that runs the Qwen2.5-1.5B-Instruct model using onnxruntime-web and tokenizers-wasm.",
   "main": "worker.js",
   "scripts": {
-    "build": "wrangler build",
-    "deploy": "wrangler publish"
+    "build": "wrangler build worker.js",
+    "deploy": "wrangler publish worker.js"
   },
   "dependencies": {
     "onnxruntime-web": "^1.10.0",
