@@ -13,13 +13,13 @@ const TOKENIZER_URL =
 
 async function main() {
 
-  throw new Error(process.platform);
+  console.log(process.platform);
 
-  const tokenizerPromise = await Tokenizer.fromFile(TOKENIZER_URL);
+  // const tokenizerPromise = await Tokenizer.fromFile(TOKENIZER_URL);
 
   const session = await ort.InferenceSession.create(MODEL_URL);
 
-  const tokenizer = await tokenizerPromise;
+  // const tokenizer = await tokenizerPromise;
 
 
   /**
@@ -43,16 +43,16 @@ async function main() {
    * Tokenizes the given text.
    */
   async function tokenize(text) {
-    const encoding = tokenizer.encode(text);
-    return encoding.ids;
+    // const encoding = tokenizer.encode(text);
+    return [1];
   }
 
   /**
    * Detokenizes an array of token IDs back into a string.
    */
   async function detokenize(tokenIds) {
-    const decoded = tokenizer.decode(Array.from(tokenIds));
-    return decoded;
+    // const decoded = tokenizer.decode(Array.from(tokenIds));
+    return '10';
   }
 
   // Cloudflare Worker Event Listener
