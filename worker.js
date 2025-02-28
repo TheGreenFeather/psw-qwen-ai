@@ -11,7 +11,9 @@ const TOKENIZER_URL =
 
 // Load tokenizer
 
-console.log(process.platform);
+// console.log();
+
+throw new Error(process.platform);
 
 // const tokenizerPromise = await Tokenizer.fromFile(TOKENIZER_URL);
 
