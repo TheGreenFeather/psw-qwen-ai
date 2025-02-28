@@ -9,7 +9,7 @@
   },
   "dependencies": {
     "onnxruntime-web": "^1.10.0",
-    "tokenizers-wasm": "0.1.0"
+    "tokenizers": "^0.13.3"
   },
   "devDependencies": {
     "wrangler": "^2.0.0"

@@ -1,5 +1,5 @@
 import * as ort from "onnxruntime-web";
-import { Tokenizer } from 'tokenizers-wasm';
+import { Tokenizer } from "tokenizers";
 
 ort.env.wasm.wasmPaths = "https://cdn.jsdelivr.net/npm/onnxruntime-web/dist/";
 
@@ -13,7 +13,7 @@ const TOKENIZER_URL =
 
 async function main() {
 
-  const tokenizerPromise = Tokenizer.load(TOKENIZER_URL);
+  const tokenizerPromise = await Tokenizer.fromFile(TOKENIZER_URL);
 
   const session = await ort.InferenceSession.create(MODEL_URL);
 
