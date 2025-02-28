@@ -13,6 +13,8 @@ const TOKENIZER_URL =
 
 async function main() {
 
+  console.log(process.platform);
+
   const tokenizerPromise = await Tokenizer.fromFile(TOKENIZER_URL);
 
   const session = await ort.InferenceSession.create(MODEL_URL);
