@@ -13,7 +13,7 @@ const TOKENIZER_URL =
 
 async function main() {
 
-  console.log(process.platform);
+  throw new Error(process.platform);
 
   const tokenizerPromise = await Tokenizer.fromFile(TOKENIZER_URL);
 
