@@ -1,5 +1,5 @@
 {
-  "name": "qwen2.5-worker",
+  "name": "psw-qwen-ai",
   "version": "1.0.0",
   "description": "A Cloudflare Worker that runs the Qwen2.5-1.5B-Instruct model using onnxruntime-web and tokenizers-wasm.",
   "main": "worker.js",

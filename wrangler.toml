@@ -1,4 +1,4 @@
-name = "qwen2.5-worker"
+name = "psw-qwen-ai"
 type = "javascript"
 
 account_id = "deab1848c77408b182c391e586116d9f"
