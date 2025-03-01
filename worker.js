@@ -86,7 +86,7 @@ async function handleRequest(request) {
   const corsHeaders = {
     'Access-Control-Allow-Origin': '*',
     'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
-    'Access-Control-Allow-Headers': 'Content-Type, Authorization, orgin, request'
+    'Access-Control-Allow-Headers': 'Content-Type, Authorization, orgin'
   };
 
   if (request.method === "OPTIONS") {
