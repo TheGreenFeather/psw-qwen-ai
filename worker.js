@@ -83,14 +83,16 @@ addEventListener("fetch", (event) => {
  * Handles incoming requests. Expects a POST with JSON { "prompt": "..." }.
  */
 async function handleRequest(request) {
+  const corsHeaders = {
+    'Access-Control-Allow-Origin': '*',
+    'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
+    'Access-Control-Allow-Headers': 'Content-Type, Authorization, orgin, request'
+  };
+
   if (request.method === "OPTIONS") {
     return new Response(null, {
       status: 204,
-      headers: {
-        "Access-Control-Allow-Origin": "*",
-        "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
-        "Access-Control-Allow-Headers": "Content-Type, Authorization, orgin, request",
-      },
+      headers: corsHeaders,
     });
   }
 
@@ -107,7 +109,7 @@ async function handleRequest(request) {
       return new Response(JSON.stringify({ message: generatedText }), {
         headers: {
           "Content-Type": "application/json",
-          "Access-Control-Allow-Origin": "*",
+          ...corsHeaders,
         },
       });
     } catch (error) {
