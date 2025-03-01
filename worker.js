@@ -81,15 +81,27 @@ addEventListener('fetch', (event) => {
 
 const corsHeaders = {
   'Access-Control-Allow-Headers': '*', // What headers are allowed. * is wildcard. Instead of using '*', you can specify a list of specific headers that are allowed, such as: Access-Control-Allow-Headers: X-Requested-With, Content-Type, Accept, Authorization.
-  'Access-Control-Allow-Methods': 'POST', // Allowed methods. Others could be GET, PUT, DELETE etc.
+  'Access-Control-Allow-Methods': 'POST, OPTIONS', // Allowed methods. Others could be GET, PUT, DELETE etc.
   'Access-Control-Allow-Origin': '*', // This is URLs that are allowed to access the server. * is the wildcard character meaning any URL can.
 }
 
 async function handleRequest(request) {
   if (request.method === "OPTIONS") {
-    return new Response("OK", {
-      headers: corsHeaders
-    });
+    if (request.headers.get("Origin") !== null &&
+        request.headers.get("Access-Control-Request-Method") !== null &&
+        request.headers.get("Access-Control-Request-Headers") !== null) {
+      // Handle CORS pre-flight request.
+      return new Response(null, {
+        headers: corsHeaders
+      });
+    } else {
+      // Handle standard OPTIONS request.
+      return new Response(null, {
+        headers: {
+          "Allow": "POST, OPTIONS",
+        }
+      });
+    }
   } else if (request.method === 'POST') {
     return doTheWork(request);
   } else {
