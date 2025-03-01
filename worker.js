@@ -9,23 +9,58 @@ const MODEL_URL =
 const TOKENIZER_URL =
   "https://huggingface.co/onnx-community/Qwen2.5-1.5B-Instruct/resolve/main/tokenizer.json";
 
-// Load tokenizer
+let tokenizerConfig = null;
+let session = null;
 
-// console.log();
+async function loadTokenizerConfig() {
+  const response = await fetch(TOKENIZER_URL);
+  if (!response.ok) {
+    throw new Error("Failed to fetch tokenizer configuration");
+  }
+  tokenizerConfig = await response.json();
+}
 
-throw new Error(process.platform);
+async function loadModel() {
+  session = await ort.InferenceSession.create(MODEL_URL);
+}
 
-// const tokenizerPromise = await Tokenizer.fromFile(TOKENIZER_URL);
+loadModel().then(() => console.log("Model loaded successfully"));
+loadTokenizerConfig().then(() => console.log("Tokenizer loaded successfully"));
 
+function tokenize(text) {
+  if (
+    !tokenizerConfig ||
+    !tokenizerConfig.model ||
+    !tokenizerConfig.model.vocab
+  ) {
+    throw new Error("Tokenizer not properly loaded");
+  }
+  const vocab = tokenizerConfig.model.vocab;
+  // Define unknown token id.
+  const unkId = vocab["[UNK]"] || 0;
+  // Split text by whitespace.
+  const tokens = text.split(/\s+/);
+  return tokens.map((token) =>
+    vocab[token] !== undefined ? vocab[token] : unkId
+  );
+}
 
-// const tokenizer = await tokenizerPromise;
+function detokenize(tokenIds) {
+  if (
+    !tokenizerConfig ||
+    !tokenizerConfig.model ||
+    !tokenizerConfig.model.vocab
+  ) {
+    throw new Error("Tokenizer not properly loaded");
+  }
+  const vocab = tokenizerConfig.model.vocab;
+  const idToToken = Object.fromEntries(
+    Object.entries(vocab).map(([token, id]) => [id, token])
+  );
+  return tokenIds.map((id) => idToToken[id] || "[UNK]").join(" ");
+}
 
-
-/**
- * Runs inference on the model for a given prompt.
- */
 async function generateText(prompt) {
-  const session = await ort.InferenceSession.create(MODEL_URL);
   const tokenIds = await tokenize(prompt);
   const inputTensor = new ort.Tensor("int8", Int32Array.from(tokenIds), [
     1,
@@ -37,22 +72,6 @@ async function generateText(prompt) {
   const outputTokenIds = outputTensor.data;
   const generatedText = await detokenize(outputTokenIds);
   return generatedText;
-}
-
-/**
- * Tokenizes the given text.
- */
-async function tokenize(text) {
-  // const encoding = tokenizer.encode(text);
-  return [1];
-}
-
-/**
- * Detokenizes an array of token IDs back into a string.
- */
-async function detokenize(tokenIds) {
-  // const decoded = tokenizer.decode(Array.from(tokenIds));
-  return '10';
 }
 
 // Cloudflare Worker Event Listener
@@ -68,7 +87,8 @@ async function handleRequest(request) {
     request.method === "POST" &&
     request.headers.get("Content-Type") === "application/json" &&
     request.body &&
-    request.url === "https://psw-qwen-ai.nguyenvuong17102008.workers.dev/qwen2-5/ask"
+    request.url ===
+      "https://psw-qwen-ai.nguyenvuong17102008.workers.dev/qwen2-5/ask"
   ) {
     try {
       const { message } = await request.json();
@@ -84,12 +104,3 @@ async function handleRequest(request) {
   }
   return new Response("Invalid request message", { status: 400 });
 }
-
-//  The code above is a Cloudflare Worker script that runs the ONNX model on the browser. It uses the  onnxruntime-web  library to load the model and run inference. The script also loads the tokenizer and uses it to tokenize and detokenize text. 
-//  The script listens for incoming requests and expects a POST request with a JSON body containing a  message  field. It then generates text based on the given message and returns the generated text in the response. 
-//  3. Deploy the Worker 
-//  To deploy the Worker, you need to use the  Wrangler CLI. If you haven’t installed the Wrangler CLI yet, you can install it by running the following command: 
-//  npm install -g @cloudflare/wrangler
-
-//  Next, you need to create a new Worker project using the following command: 
-//  wrangler generate qwen-ai
