@@ -1,7 +1,7 @@
 import * as ort from "onnxruntime-web";
 // import { Tokenizer } from "tokenizers";
 
-// ort.env.wasm.wasmPaths = "https://cdn.jsdelivr.net/npm/onnxruntime-web/dist/";
+ort.env.wasm.wasmPaths = "https://cdn.jsdelivr.net/npm/onnxruntime-web@1.20.1/dist/";
 
 // Model and Tokenizer URLs
 const MODEL_URL =
