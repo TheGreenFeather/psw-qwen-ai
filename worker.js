@@ -80,37 +80,47 @@ addEventListener("fetch", (event) => {
 });
 
 const corsHeaders = {
-  "Access-Control-Allow-Headers": "*", // What headers are allowed. * is wildcard. Instead of using '*', you can specify a list of specific headers that are allowed, such as: Access-Control-Allow-Headers: X-Requested-With, Content-Type, Accept, Authorization.
   "Access-Control-Allow-Methods": "GET,HEAD,POST,OPTIONS", // Allowed methods. Others could be GET, PUT, DELETE etc.
   "Access-Control-Allow-Origin": "*", // This is URLs that are allowed to access the server. * is the wildcard character meaning any URL can.
+  "Access-Control-Max-Age": "86400",
 };
 
+const API_ENDPOINT = "/qwen/ask";
+
 async function handleRequest(request) {
-  if (request.method === "OPTIONS") {
-    if (
-      request.headers.get("Access-Control-Allow-Origin") !== null &&
-      request.headers.get("Access-Control-Request-Method") !== null &&
-      request.headers.get("Access-Control-Request-Headers") !== null
-    ) {
-      // Handle CORS pre-flight request.
-      return new Response(null, {
+  const url = new URL(request.url);
+  if (url.pathname.startsWith(API_ENDPOINT)) {
+    if (request.method === "OPTIONS") {
+      if (
+        request.headers.get("Origin") !== null &&
+        request.headers.get("Access-Control-Request-Method") !== null &&
+        request.headers.get("Access-Control-Request-Headers") !== null
+      ) {
+        // Handle CORS pre-flight request.
+        return new Response(null, {
+          headers: {
+            ...corsHeaders,
+            "Access-Control-Allow-Headers": request.headers.get(
+              "Access-Control-Request-Headers",
+            ),
+          }
+        });
+      } else {
+        // Handle standard OPTIONS request.
+        return new Response(null, {
+          headers: {
+            Allow: "GET,HEAD,POST,OPTIONS",
+          },
+        });
+      }
+    } else if (request.method === "POST") {
+      return doTheWork(request);
+    } else {
+      return new Response("Method not allowed", {
+        status: 405,
         headers: corsHeaders,
       });
-    } else {
-      // Handle standard OPTIONS request.
-      return new Response(null, {
-        headers: {
-          Allow: "GET,HEAD,POST,OPTIONS",
-        },
-      });
     }
-  } else if (request.method === "POST") {
-    return doTheWork(request);
-  } else {
-    return new Response("Method not allowed", {
-      status: 405,
-      headers: corsHeaders,
-    });
   }
 }
 
@@ -125,6 +135,8 @@ async function doTheWork(request) {
 
   return new Response(JSON.stringify({ message: generatedText }), {
     headers: {
+      "Vary": "Accept-Encoding",
+      "Origin": "*",
       "Content-type": "application/json",
       ...corsHeaders, //uses the spread operator to include the CORS headers.
     },
