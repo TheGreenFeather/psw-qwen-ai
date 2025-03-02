@@ -75,39 +75,41 @@ async function generateText(prompt) {
 }
 
 // Cloudflare Worker Event Listener
-addEventListener('fetch', (event) => {
+addEventListener("fetch", (event) => {
   event.respondWith(handleRequest(event.request));
 });
 
 const corsHeaders = {
-  'Access-Control-Allow-Headers': '*', // What headers are allowed. * is wildcard. Instead of using '*', you can specify a list of specific headers that are allowed, such as: Access-Control-Allow-Headers: X-Requested-With, Content-Type, Accept, Authorization.
-  'Access-Control-Allow-Methods': 'POST, OPTIONS', // Allowed methods. Others could be GET, PUT, DELETE etc.
-  'Access-Control-Allow-Origin': '*', // This is URLs that are allowed to access the server. * is the wildcard character meaning any URL can.
-}
+  "Access-Control-Allow-Headers": "*", // What headers are allowed. * is wildcard. Instead of using '*', you can specify a list of specific headers that are allowed, such as: Access-Control-Allow-Headers: X-Requested-With, Content-Type, Accept, Authorization.
+  "Access-Control-Allow-Methods": "GET,HEAD,POST,OPTIONS", // Allowed methods. Others could be GET, PUT, DELETE etc.
+  "Access-Control-Allow-Origin": "*", // This is URLs that are allowed to access the server. * is the wildcard character meaning any URL can.
+};
 
 async function handleRequest(request) {
   if (request.method === "OPTIONS") {
-    if (request.headers.get("Origin") !== null &&
-        request.headers.get("Access-Control-Request-Method") !== null &&
-        request.headers.get("Access-Control-Request-Headers") !== null) {
+    if (
+      request.headers.get("Access-Control-Allow-Origin") !== null &&
+      request.headers.get("Access-Control-Request-Method") !== null &&
+      request.headers.get("Access-Control-Request-Headers") !== null
+    ) {
       // Handle CORS pre-flight request.
       return new Response(null, {
-        headers: corsHeaders
+        headers: corsHeaders,
       });
     } else {
       // Handle standard OPTIONS request.
       return new Response(null, {
         headers: {
-          "Allow": "POST, OPTIONS",
-        }
+          Allow: "GET,HEAD,POST,OPTIONS",
+        },
       });
     }
-  } else if (request.method === 'POST') {
+  } else if (request.method === "POST") {
     return doTheWork(request);
   } else {
     return new Response("Method not allowed", {
       status: 405,
-      headers: corsHeaders
+      headers: corsHeaders,
     });
   }
 }
@@ -117,15 +119,14 @@ async function doTheWork(request) {
   const requestBody = await request.json();
   let message = requestBody.message;
 
-
   const generatedText = await generateText(message);
 
   //do the work here
 
-  return new Response(JSON.stringify({ message : generatedText}), {
+  return new Response(JSON.stringify({ message: generatedText }), {
     headers: {
-      'Content-type': 'application/json',
-      ...corsHeaders //uses the spread operator to include the CORS headers.
-    }
+      "Content-type": "application/json",
+      ...corsHeaders, //uses the spread operator to include the CORS headers.
+    },
   });
 }
