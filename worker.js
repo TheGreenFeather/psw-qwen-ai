@@ -12,6 +12,8 @@ const TOKENIZER_URL =
 let tokenizerConfig = null;
 let session = null;
 
+console.log("Started");
+
 async function loadTokenizerConfig() {
   const response = await fetch(TOKENIZER_URL);
   if (!response.ok) {
