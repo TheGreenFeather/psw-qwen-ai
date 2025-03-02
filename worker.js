@@ -9,27 +9,21 @@ const MODEL_URL =
 const TOKENIZER_URL =
   "https://huggingface.co/onnx-community/Qwen2.5-1.5B-Instruct/resolve/main/tokenizer.json";
 
-let tokenizerConfig = null;
-let session = null;
+// let tokenizerConfig = null;
+// let session = null;
 
-console.log("Started");
+// console.log("Started");
 
-async function loadTokenizerConfig() {
+// async function loadModel() {
+  
+// }
+
+// loadModel().then(() => console.log("Model loaded successfully"));
+// loadTokenizerConfig().then(() => console.log("Tokenizer loaded successfully"));
+
+async function tokenize(text) {
   const response = await fetch(TOKENIZER_URL);
-  if (!response.ok) {
-    throw new Error("Failed to fetch tokenizer configuration");
-  }
-  tokenizerConfig = await response.json();
-}
-
-async function loadModel() {
-  session = await ort.InferenceSession.create(MODEL_URL);
-}
-
-loadModel().then(() => console.log("Model loaded successfully"));
-loadTokenizerConfig().then(() => console.log("Tokenizer loaded successfully"));
-
-function tokenize(text) {
+  const tokenizerConfig = await response.json();
   if (
     !tokenizerConfig ||
     !tokenizerConfig.model ||
@@ -47,7 +41,9 @@ function tokenize(text) {
   );
 }
 
-function detokenize(tokenIds) {
+async function detokenize(tokenIds) {
+  const response = await fetch(TOKENIZER_URL);
+  const tokenizerConfig = await response.json();
   if (
     !tokenizerConfig ||
     !tokenizerConfig.model ||
@@ -63,6 +59,7 @@ function detokenize(tokenIds) {
 }
 
 async function generateText(prompt) {
+  const session = await ort.InferenceSession.create(MODEL_URL);
   const tokenIds = await tokenize(prompt);
   const inputTensor = new ort.Tensor("int8", Int32Array.from(tokenIds), [
     1,
@@ -129,8 +126,9 @@ async function handleRequest(request) {
 
 async function doTheWork(request) {
   // Parse the request body to get the parameters
+  
   const requestBody = await request.json();
-  let message = requestBody.message;
+  const message = requestBody.message;
 
   const generatedText = await generateText(message);
 
